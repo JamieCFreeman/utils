@@ -26,8 +26,9 @@ matchLength <- function(file, protein=FALSE) {
 	}
 
 	# If protein, want to divide by 3, if not don't
+	# Bash doesn't like floats
 	if ( protein == TRUE ) {
-		sum(stor_vec)/3
+		floor( sum(stor_vec)/3 )
 	} else { sum(stor_vec) }
 
 }
