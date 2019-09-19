@@ -8,7 +8,10 @@
 # 	24063005 24064420
 #	24064479 24065201
 
+# Read in arguments
+args <- commandArgs( trailingOnly=TRUE )
 
+# Define function
 matchLength <- function(file, protein=FALSE) {
 
 	# Read in space-separated file.
@@ -29,4 +32,8 @@ matchLength <- function(file, protein=FALSE) {
 
 }
 
-
+# Call function on arguments
+if ( length(args) == 2 ) { 
+	matchLength( args[1], args[2] ) 
+	} else { matchLength( args[1] ) 
+               }
