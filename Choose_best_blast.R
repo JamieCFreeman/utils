@@ -6,10 +6,10 @@
 
 # Read in arguments
 args <- commandArgs( trailingOnly=TRUE )
-file <- args[1]
+blast.file <- args[1]
 
 # Read data in, force numeric columns as numeric
-blast = read.table(file, header=FALSE)
+blast = read.table(blast.file, header=FALSE)
 blast[, 3:12] <- sapply(blast[, 3:12] , as.numeric)
 
 # Get hits
