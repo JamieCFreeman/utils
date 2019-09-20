@@ -6,6 +6,7 @@
 
 # Read in arguments
 args <- commandArgs( trailingOnly=TRUE )
+file <- args[1]
 
 # Read data in, force numeric columns as numeric
 blast = read.table(file, header=FALSE)
