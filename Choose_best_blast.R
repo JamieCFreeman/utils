@@ -38,7 +38,9 @@ for ( i in 1:length(hits) ) {
 	qual_metrics[i,5] <- sum( blast.subs[,12] )
 }
 
-
+# When there are many hits on the same scaffold, the length & bit score 
+# of poor matches can be better than the best hit. Filter poor hits out.
+qual_metrics <- qual_metrics[ qual_metrics[,1] > 70 ,]
 
 # Will decide based on % identity, length of match, & bit score
 # If all 3 metrics agree, return the match.
