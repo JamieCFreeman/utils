@@ -48,9 +48,9 @@ qual_metrics <- matrix(qual_metrics, ncol=5)
 # If only 1 match survived identity filter, return that match.
 # If all 3 metrics agree, return the match.
 # Otherwise return "Fail"
-if ( nrow(qual_metrics) == 1 ) { hits[1] } else if
+if ( nrow(qual_metrics) == 1 ) { toString( hits[1]) } else if
 ( which.max(qual_metrics[,1]) == which.max(qual_metrics[,2]) & which.max(qual_metrics[,2]) == 
-		which.max(qual_metrics[,5]) ) {toString( hits[which.max(qual_metrics[,2])] )
+		which.max(qual_metrics[,5]) ) { toString( hits[which.max(qual_metrics[,2])] )
 } else { print("Fail") }
 
 
