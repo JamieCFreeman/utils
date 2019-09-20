@@ -12,8 +12,9 @@ library("GenomicRanges")
 # blast.file <- args[1]
 # out.file <- args[2]
 
-blast.file="XP_011294256_top_hit.blast1"
-out.file="./prot_all_max8_filt/XP_011294256_top_hit.blast1.filt"
+blast.file="XP_005185265_top_hit.blast1"
+out.file="./prot_all_max8_filt/XP_005185265_top_hit.blast1"	# for blast1
+#out.file="./recip_blast_out/XP_011294256_top_hit_pipeless.blast2.filt"	#for blast2
 # Read data in, force numeric columns as numeric
 blast <- read.table(blast.file, header=FALSE)
 blast[, 3:12] <- sapply(blast[, 3:12] , as.numeric)
