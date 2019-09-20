@@ -9,8 +9,12 @@ args <- commandArgs( trailingOnly=TRUE )
 blast.file <- args[1]
 
 # Read data in, force numeric columns as numeric
-blast = read.table(blast.file, header=FALSE)
+blast <- read.table(blast.file, header=FALSE)
 blast[, 3:12] <- sapply(blast[, 3:12] , as.numeric)
+
+# Check direction on reference
+# Do matches go in same direction on ref?
+blast <- cbind(blast, V13=sign( blast[,10] - blast[,9] ) )
 
 # Get hits
 hits = unique( blast[,2] )
@@ -21,6 +25,15 @@ qual_metrics = matrix(NA, ncol=5, nrow=length(hits))
 # Loop through hits, subset the data for each, and calculate quality metrics.
 for ( i in 1:length(hits) ) {
 	blast.subs <- blast[ blast[,2]==hits[i],]
+	# When matches hit the same ref in different directions, keep only the better match ( by % ID).
+	if ( abs( sum(blast.subs[,13])) != nrow(blast.subs)  ) {
+		# Is the 1 set better than the -1 set?
+		if ( mean( blast.subs[ blast.subs[,13]==1 ,][,3] ) >= mean( blast.subs[ blast.subs[,13]==-1 ,][,3] ) ) {
+			# If true: change subset to 
+			blast.subs <- blast.subs[ blast.subs[,13] == 1 ,] } else {
+			blast.subs <- blast.subs[ blast.subs[,13] == -1 ,] } 
+		
+	}
 	
 	# Perc identical matches
 	qual_metrics[i,1] <- mean( blast.subs[,3] )
