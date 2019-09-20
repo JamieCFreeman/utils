@@ -1,0 +1,55 @@
+
+# 2019-9-19 JCF
+
+# R script to choose best hit from a blast tabular output (6) based on length of hit, % identity, 
+# and bit score.
+
+# Read in arguments
+args <- commandArgs( trailingOnly=TRUE )
+
+# Read data in, force numeric columns as numeric
+blast = read.table(file, header=FALSE)
+blast[, 3:12] <- sapply(blast[, 3:12] , as.numeric)
+
+# Get hits
+hits = unique( blast[,2] )
+
+# Initialize matrix to store results
+qual_metrics = matrix(NA, ncol=5, nrow=length(hits))
+
+# Loop through hits, subset the data for each, and calculate quality metrics.
+for ( i in 1:length(hits) ) {
+	blast.subs <- blast[ blast[,2]==hits[i],]
+	
+	# Perc identical matches
+	qual_metrics[i,1] <- mean( blast.subs[,3] )
+	
+	# Length of match 
+	qual_metrics[i,2] <- sum( abs( blast.subs[,10] - blast.subs[,9] + 1 ) )
+	
+	# Total number mismatches
+	qual_metrics[i,3] <- sum( blast.subs[,5] )
+	
+	# Total number gaps
+	qual_metrics[i,4] <- sum( blast.subs[,6] )
+	
+	# Total bit score
+	qual_metrics[i,5] <- sum( blast.subs[,12] )
+}
+
+
+
+# Will decide based on % identity, length of match, & bit score
+# If all 3 metrics agree, return the match.
+# Otherwise return
+if ( which.max(qual_metrics[,1]) == which.max(qual_metrics[,2]) & which.max(qual_metrics[,2]) == which.max(qual_metrics[,5]) ) {
+	toString( hits[which.max(qual_metrics[,2])] )
+} else { print("Fail") }
+
+
+
+
+
+
+
+
