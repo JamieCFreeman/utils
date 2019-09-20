@@ -42,10 +42,12 @@ for ( i in 1:length(hits) ) {
 # of poor matches can be better than the best hit. Filter poor hits out.
 qual_metrics <- qual_metrics[ qual_metrics[,1] > 70 ,]
 
+
 # Will decide based on % identity, length of match, & bit score
+# If only 1 match survived identity filter, return that match.
 # If all 3 metrics agree, return the match.
-# Otherwise return
-if ( which.max(qual_metrics[,1]) == which.max(qual_metrics[,2]) & which.max(qual_metrics[,2]) == which.max(qual_metrics[,5]) ) {
+# Otherwise return "Fail"
+if ( nrow(qual_metrics) == 1 ) { print qual_metrics } elif ( which.max(qual_metrics[,1]) == which.max(qual_metrics[,2]) & which.max(qual_metrics[,2]) == which.max(qual_metrics[,5]) ) {
 	toString( hits[which.max(qual_metrics[,2])] )
 } else { print("Fail") }
 
