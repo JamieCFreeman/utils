@@ -4,6 +4,7 @@
 # From BLAST+ output for tblastn, find multiple hits of the same reference to the same sequence.
 # For any regions with two overlapping hits, drop the lower scoring.
 
+rm( list = ls())
 # Requires library GenomicsRanges
 library("GenomicRanges")
 
@@ -12,12 +13,17 @@ library("GenomicRanges")
 # blast.file <- args[1]
 # out.file <- args[2]
 
-blast.file="XP_005185265_top_hit.blast1"
-out.file="./prot_all_max8_filt/XP_005185265_top_hit.blast1"	# for blast1
+blast.file="XP_005190501_top_hit.blast1"
+out.file="./recip_blast_out/XP_005190501_top_hit.blast1.filt"	
+# out.file="./prot_all_max8_filt/XP_005182218_top_hit.blast1.filt"	# for blast1
+# blast.file="XP_005182218_top_hit_pipeless.blast2"			#for blast2
 #out.file="./recip_blast_out/XP_011294256_top_hit_pipeless.blast2.filt"	#for blast2
 # Read data in, force numeric columns as numeric
 blast <- read.table(blast.file, header=FALSE)
 blast[, 3:12] <- sapply(blast[, 3:12] , as.numeric)
+
+# Are there any good matches present? If not, break script.
+# blast[,3] >= 50
 
 # Do matches go in same direction on ref?
 blast <- cbind(blast, V13=sign( blast[,10] - blast[,9] ) )
@@ -61,17 +67,22 @@ for ( i in 1:length( unique( blast[,2] ) ) ) {
 						 	    ) 
 							  )
 				    	   ]
-
+					   
 			# Get the index of the lower scoring row within the main set
-			row.to.remove <- as.numeric( as.character( row.names( blast.subs[subs.to.remove, ] ) 
-								 ) 
-				 		  )
+			row.to.remove <- row.names( blast.subs[subs.to.remove, ] ) 
+							
 
-			# Remove the lower scoring row.
-			blast <- blast[-row.to.remove, ]
+			# Remove the lower scoring row, and resubset blast
+			blast <- blast[ row.names(blast) != row.to.remove ,]
+
+			subs.blast <- blast[ blast[,2]==  unique( blast[,2] )[i] ,]
 	
-			# Remove the fixed overlap from our list to check		       
-			overlaps_to_check <- overlaps_to_check[-k,]
+			# Remove the fixed overlap from our list to check ( remove all rows containing it)
+			# Must be last action- if nrow==0, loop breaks
+			overlaps_to_check <- overlaps_to_check[ which(  !apply( overlaps_to_check, 1, 
+						   function(x) identical( x[1] , subs.to.remove ) | identical( x[2] , subs.to.remove ) )
+							) ,]
+			# overlaps_to_check <- overlaps_to_check[-k,]
 
 		}
 	}
