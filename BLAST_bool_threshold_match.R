@@ -9,7 +9,8 @@
 #    Rscript /workdir/jcf236/utils/Choose_best_blast.R ./prot_all_max8_filt/${PROT_ID}_top_hit.blast1.filt
 args <- commandArgs( trailingOnly=TRUE )
 blast.file <- args[1]
-threshold <- args[2]
+# Must use as.numeric to force number instead of string
+threshold <- as.numeric( args[2] )	
 
 # Define function
 BLAST_bool_threshold_match <- function(blast.file, threshold) {
