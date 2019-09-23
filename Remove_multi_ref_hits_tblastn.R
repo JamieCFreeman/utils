@@ -13,8 +13,8 @@ library("GenomicRanges")
 # blast.file <- args[1]
 # out.file <- args[2]
 
-blast.file="XP_005190501_top_hit.blast1"
-out.file="./recip_blast_out/XP_005190501_top_hit.blast1.filt"	
+# blast.file="XP_005190501_top_hit.blast1"
+# out.file="./recip_blast_out/XP_005190501_top_hit.blast1.filt"	
 # out.file="./prot_all_max8_filt/XP_005182218_top_hit.blast1.filt"	# for blast1
 # blast.file="XP_005182218_top_hit_pipeless.blast2"			#for blast2
 #out.file="./recip_blast_out/XP_011294256_top_hit_pipeless.blast2.filt"	#for blast2
