@@ -55,6 +55,7 @@
 #    Rscript /workdir/jcf236/utils/Choose_best_blast.R ./prot_all_max8_filt/${PROT_ID}_top_hit.blast1.filt
 args <- commandArgs( trailingOnly=TRUE )
 blast.file <- args[1]
+prot.length < args[2]
 
 # Read data in, force numeric columns as numeric
 blast <- read.table(blast.file, header=FALSE)
@@ -108,11 +109,16 @@ qual_metrics <- matrix(qual_metrics, ncol=5)
 # Will decide based on % identity, length of match, & bit score
 # If only 1 match survived identity filter, return that match.
 # If all 3 metrics agree, return the match.
+# If identity & bit score agree, then check length. As long as the best alignment by other metrics
+# covers >= 95% of length, return that. (Seems like a few bp differences in some alignments are causing fail).
 # Otherwise return "Fail"
-if ( nrow(qual_metrics) == 1 ) { toString( hits[1]) } else if
-( which.max(qual_metrics[,1]) == which.max(qual_metrics[,2]) & which.max(qual_metrics[,2]) == 
-		which.max(qual_metrics[,5]) ) { toString( hits[which.max(qual_metrics[,2])] )
-} else { print("Fail") }
+if ( nrow(qual_metrics) == 1 ) { toString( hits[1]) 
+} else if ( which.max(qual_metrics[,1]) == which.max(qual_metrics[,2]) & which.max(qual_metrics[,2]) == 
+		which.max(qual_metrics[,5]) ) { toString( hits[which.max(qual_metrics[,2])] ) 
+} else if ( which.max(qual_metrics[,1]) == which.max(qual_metrics[,5]) &
+	        qual_metrics[which.max(qual_metrics[,1]),2] >= ( 0.95 * prot.length) ) {
+	     toString( hits[which.max(qual_metrics[,1])] ) 
+} else { print("Fail"); print(qual_metrics) }
 
 
 
