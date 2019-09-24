@@ -55,7 +55,7 @@
 #    Rscript /workdir/jcf236/utils/Choose_best_blast.R ./prot_all_max8_filt/${PROT_ID}_top_hit.blast1.filt
 args <- commandArgs( trailingOnly=TRUE )
 blast.file <- args[1]
-prot.length < args[2]
+prot.length < as.numeric( args[2] )
 
 # Read data in, force numeric columns as numeric
 blast <- read.table(blast.file, header=FALSE)
