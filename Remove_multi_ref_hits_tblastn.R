@@ -25,18 +25,22 @@ blast[, 3:12] <- sapply(blast[, 3:12] , as.numeric)
 # Are there any good matches present? If not, break script.
 # blast[,3] >= 50
 
-# Do matches go in same direction on ref?
-blast <- cbind(blast, V13=sign( blast[,10] - blast[,9] ) )
+# IRanges won't take negative ranges, add row to indicate sense (+1 for positive, -1 for negative)
+blast <- cbind(blast, V13=sign( blast[,8] - blast[,7] ) )
 
 # Set minimum useful identity of matches
 blast <- blast[ blast[,3] >= 50,]
 # Reset row names after subset
 rownames( blast ) <- seq( length <- nrow( blast) )
 
-# Set ranges
+# Set ranges 
 for ( i in 1:length( unique( blast[,2] ) ) ) {
 	blast.subs <- blast[ blast[,2]==  unique( blast[,2] )[i] ,]
-	ranges   <- IRanges(blast.subs[,7], blast.subs[,8] ) 
+	# Ensure ranges go in + direction
+	if ( blast.subs[1,13] == 1) {
+		ranges   <- IRanges(blast.subs[,7], blast.subs[,8] ) } else if ( blast.subs[1,13] == -1) {
+		ranges   <- IRanges(blast.subs[,8], blast.subs[,7] )
+		}
 
 	# Search ranges against itself to find all overlaps
 	range.overlaps <- cbind( subjectHits( GenomicRanges::findOverlaps(query=ranges, subject=ranges, minoverlap=20, type="any") ) , 
