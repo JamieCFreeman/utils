@@ -12,7 +12,7 @@
 
 check_inst <- function(pkg) {
  
-   nzchar( system.file(package = "pkg") )
+   nzchar( system.file(package = pkg) )
 
   }
 
