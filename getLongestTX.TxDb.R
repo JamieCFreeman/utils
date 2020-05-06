@@ -17,7 +17,7 @@ getLongestTX.TxDb <- function( txdb ) {
   if( class( txdb ) !="TxDb" ) { stop("Function expects a TxDb as input.") }
   
   # Get length of transcript of all genes
-  TX.lengths <- GenomicFeatures::transcriptLengths(TxDb.name )
+  TX.lengths <- GenomicFeatures::transcriptLengths( txdb )
   #     tx_id   tx_name    gene_id nexon tx_len
   # 1     1 AAEL012102-RB AAEL012102     6   2159
   # 2     2 AAEL012102-RA AAEL012102     5   2147
