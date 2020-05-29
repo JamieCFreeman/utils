@@ -3,6 +3,7 @@
 # 2019-9-13
 # Report right-most position of alignment on reference from a bam
 # Prints with YS:i: tag in bam 
+# Prints to stdout (in bam format), so make sure to redirect to file
 
 # Source: Written by dariober in a SeqAnswers.com thread
 # http://seqanswers.com/forums/showthread.php?t=51162
